@@ -15,7 +15,10 @@ mongoose.connect(process.env.MONGO_URI)
         .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 app.use((req, res, next) => {
-        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader(
+                "Access-Control-Allow-Origin",
+                "https://vue-crash-2021-traversy-2.vercel.app/"
+        );
         res.setHeader(
                 "Access-Control-Allow-Headers",
                 "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
