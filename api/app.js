@@ -56,9 +56,6 @@ app.get("/api/item/:slug", (req, res) => {
         res.end(`Item: ${slug}`);
 });
 
-module.exports = app;
-
-app.use(bodyParser.json());
 app.use(helmet());
 app.use(express.json());
 
