@@ -1,35 +1,48 @@
-const express = require("express");
-const helmet = require("helmet");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const Task = require("./models/Task");
-const cors = require("cors");
-const app = express();
-const tasksRoutes = require("./routes/tasks");
-const dotenv = require("dotenv");
+const http = require("http");
+const app = require("./app");
 
-dotenv.config();
+const normalizePort = (val) => {
+  const port = parseInt(val, 10);
 
-mongoose.connect(process.env.MONGO_URI)
+  if (isNaN(port)) {
+    return val;
+  }
+  if (port >= 0) {
+    return port;
+  }
+  return false;
+};
+const port = normalizePort(process.env.PORT || "3000");
+app.set("port", port);
 
-        .then(() => console.log("Connexion à MongoDB réussie !"))
-        .catch(() => console.log("Connexion à MongoDB échouée !"));
-
-const corsOptions = {
-        origin: process.env.CLIENT_URL,
-        credentials: true,
-        allowedHeaders: ["sessionId", "Content-Type"],
-        exposedHeaders: ["sessionId"],
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        preflightContinue: false,
+const errorHandler = (error) => {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+  const address = server.address();
+  const bind =
+    typeof address === "string" ? "pipe " + address : "port: " + port;
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges.");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use.");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
 };
 
-app.use(cors({ corsOptions }));
+const server = http.createServer(app);
 
-app.use(bodyParser.json());
-app.use(helmet());
-app.use(express.json());
+server.on("error", errorHandler);
+server.on("listening", () => {
+  const address = server.address();
+  const bind = typeof address === "string" ? "pipe " + address : "port " + port;
+  console.log("Listening on " + bind);
+});
 
-app.use("/api/tasks", tasksRoutes);
-
-module.exports = app;
+server.listen(port);
