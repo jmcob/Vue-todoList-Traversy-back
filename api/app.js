@@ -15,9 +15,6 @@ mongoose.connect(process.env.MONGO_URI)
         .then(() => console.log("Connexion à MongoDB réussie !"))
         .catch(() => console.log("Connexion à MongoDB échouée !"));
 
-const app = require("express")();
-const { v4 } = require("uuid");
-
 app.get("/api", (req, res) => {
         const path = `/api/item/${v4()}`;
         res.setHeader("Content-Type", "text/html");
