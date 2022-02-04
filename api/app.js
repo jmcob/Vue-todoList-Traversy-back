@@ -1,7 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const Task = require("./models/Task");
 const cors = require("cors");
 const app = express();
