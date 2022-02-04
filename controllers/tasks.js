@@ -5,14 +5,12 @@ const fs = require("fs");
 exports.createTask = (req, res, next) => {
         console.log(req.body);
         const taskObject = req.body;
-        delete taskObject._id;
+        // delete taskObject.id;
         const task = new Task({
                 ...taskObject,
         });
         task.save()
-                .then(() =>
-                        res.status(201).json({ message: "Task enregistré !" })
-                )
+                .then(() => res.status(201).json(task))
                 .catch((error) => res.status(400).json({ error }));
 };
 
@@ -21,8 +19,8 @@ exports.getOneTask = (req, res, next) => {
         Task.findOne({
                 _id: req.params.id,
         })
-                .then((task) => {
-                        res.status(200).json(task);
+                .then((data) => {
+                        res.status(200).json(data);
                 })
                 .catch((error) => {
                         res.status(404).json({
@@ -32,19 +30,14 @@ exports.getOneTask = (req, res, next) => {
 };
 
 // User is updating a task he created
-exports.modifyTask = (req, res, next) => {
-        Task.findOne({ id: req.params.id }).then((task) => {
-                Task.updateOne(
-                        { id: req.params.id },
-                        { ...taskObject, id: req.params.id }
-                )
-                        .then(() =>
-                                res.status(200).json({
-                                        message: "Task modifiée !",
-                                })
-                        )
-                        .catch((error) => res.status(400).json({ error }));
-        });
+exports.modifyTask = async (req, res, next) => {
+        let taskToUpdate = await Task.findOne({ _id: req.params.id });
+        // delete taskObject._id;
+        taskToUpdate.reminder = !taskToUpdate.reminder;
+        taskToUpdate
+                .save()
+                .then((data) => res.status(200).json(data))
+                .catch((error) => res.status(400).json({ error }));
 };
 
 // User is deleting one of his sauces
