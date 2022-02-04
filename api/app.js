@@ -5,6 +5,7 @@ const Task = require("./models/Task");
 const cors = require("cors");
 const app = express();
 const tasksRoutes = require("./routes/tasks");
+const userRoutes = require("./routes/user");
 const dotenv = require("dotenv");
 const { v4 } = require("uuid");
 
@@ -56,5 +57,6 @@ app.use(helmet());
 app.use(express.json());
 
 app.use("/api/tasks", tasksRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app;
