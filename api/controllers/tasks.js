@@ -98,7 +98,7 @@ exports.deleteTask = (req, res, next) => {
                         {
                                 $pull: {
                                         tasks: {
-                                                _id: req.params.id,
+                                                _id: req.body.taskId,
                                         },
                                 },
                         },
