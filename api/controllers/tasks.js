@@ -42,7 +42,7 @@ exports.modifyTask = async (req, res, next) => {
 
 // User is deleting one of his sauces
 exports.deleteTask = (req, res, next) => {
-        Task.deleteOne({ id: req.params.id })
+        Task.deleteOne({ _id: req.params.id })
                 .then(() =>
                         res.status(200).json({
                                 message: "Task supprimé !",
